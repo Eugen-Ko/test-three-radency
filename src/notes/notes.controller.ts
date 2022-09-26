@@ -8,6 +8,7 @@ import {
   HttpException,
   HttpStatus,
   Param,
+  ParseUUIDPipe,
   Patch,
   Post,
 } from '@nestjs/common';
@@ -35,24 +36,26 @@ export class NotesController {
   }
 
   @Get(':id')
-  getById(@Param('id') id: string): NoteDto | HttpException {
+  getById(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): NoteDto | HttpException {
     console.log(id);
     return this.notesService.getById(id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
-  deleteById(@Param('id') id: string): HttpException {
+  deleteById(@Param('id', new ParseUUIDPipe()) id: string): HttpException {
     return this.notesService.deleteById(id);
   }
 
   @Patch('arch/:id')
-  setArchById(@Param('id') id: string) {
+  setArchById(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.notesService.setArchById(id);
   }
 
   @Patch('unarch/:id')
-  setUnArchById(@Param('id') id: string) {
+  setUnArchById(@Param('id', new ParseUUIDPipe()) id: string) {
     return this.notesService.setUnArchById(id);
   }
 
@@ -67,7 +70,7 @@ export class NotesController {
   @Patch(':id')
   updateElById(
     @Body(new UpdateNoteValidatorPipe()) updateNote: UpdateNoteDto,
-    @Param('id') id: string,
+    @Param('id', new ParseUUIDPipe()) id: string,
   ) {
     return this.notesService.updateElById(id, updateNote);
   }
