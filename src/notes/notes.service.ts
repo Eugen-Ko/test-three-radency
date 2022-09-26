@@ -69,14 +69,6 @@ export class NotesService {
   }
 
   updateElById(id: string, updateNote: UpdateNoteDto) {
-    console.log(uuidv4());
-    console.log(uuidv4());
-    console.log(uuidv4());
-    console.log(uuidv4());
-    console.log(uuidv4());
-    console.log(uuidv4());
-    console.log(uuidv4());
-
     const index = this.notes.findIndex((el) => el.id === id);
     this.notes[index] = { ...this.notes[index], ...updateNote };
     return this.notes[index];
