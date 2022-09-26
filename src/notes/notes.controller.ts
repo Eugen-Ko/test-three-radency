@@ -11,10 +11,12 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { CreateNoteValidatorPipe } from './createNote.validator';
 import { CreateNoteDto } from './dto/create-note.dto';
 import { NoteDto } from './dto/note.dto';
 import { UpdateNoteDto } from './dto/update-note.dto';
 import { NotesService } from './notes.service';
+import { UpdateNoteValidatorPipe } from './updateNote.validator';
 
 @Controller('notes')
 export class NotesController {
@@ -46,8 +48,6 @@ export class NotesController {
 
   @Patch('arch/:id')
   setArchById(@Param('id') id: string) {
-    console.log(id);
-
     return this.notesService.setArchById(id);
   }
 
@@ -58,16 +58,17 @@ export class NotesController {
 
   @Post()
   @HttpCode(HttpStatus.CREATED)
-  @Header('Cache-control', 'none')
-  createEl(@Body() createNote: CreateNoteDto): CreateNoteDto[] {
+  createEl(
+    @Body(new CreateNoteValidatorPipe()) createNote: CreateNoteDto,
+  ): NoteDto {
     return this.notesService.createEl(createNote);
   }
 
-  // @Patch()
-  // setUnArchById() {}
-
-  // @Patch(':id') //@Put()
-  // updateElById(@Body() updateNote: UpdateNoteDto, @Param('id') id: string) {
-  //   return 'update ' + id;
-  // }
+  @Patch(':id')
+  updateElById(
+    @Body(new UpdateNoteValidatorPipe()) updateNote: UpdateNoteDto,
+    @Param('id') id: string,
+  ) {
+    return this.notesService.updateElById(id, updateNote);
+  }
 }

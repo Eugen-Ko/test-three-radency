@@ -1,11 +1,12 @@
 import { notFound } from './helper/error.helpers';
 import { aggregatedStat } from './helper/aggregatedStat.helper';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import * as MOCKED_NOTES from '../assets/initialNotes.json';
+import MOCKED_NOTES from '../assets/initialNotes.json';
 
 import { v4 as uuidv4 } from 'uuid';
 import { NoteDto } from './dto/note.dto';
 import { CreateNoteDto } from './dto/create-note.dto';
+import { UpdateNoteDto } from './dto/update-note.dto';
 
 @Injectable()
 export class NotesService {
@@ -52,7 +53,32 @@ export class NotesService {
   }
 
   createEl(createNote: CreateNoteDto) {
-    this.notes.push({ ...createNote, id: uuidv4() });
-    return this.notes;
+    const res = {
+      ...createNote,
+      createDate: new Date().toLocaleString('en-US', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+      isArch: false,
+      id: uuidv4(),
+    };
+
+    this.notes.push(res);
+    return res;
+  }
+
+  updateElById(id: string, updateNote: UpdateNoteDto) {
+    console.log(uuidv4());
+    console.log(uuidv4());
+    console.log(uuidv4());
+    console.log(uuidv4());
+    console.log(uuidv4());
+    console.log(uuidv4());
+    console.log(uuidv4());
+
+    const index = this.notes.findIndex((el) => el.id === id);
+    this.notes[index] = { ...this.notes[index], ...updateNote };
+    return this.notes[index];
   }
 }
