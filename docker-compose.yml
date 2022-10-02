@@ -11,9 +11,6 @@ services:
     command: npm run start:dev
     ports:
       - 3000:3000
-      - 9229:9229
-    # networks:
-    #   - nesjs-network
     volumes:
       - .:/app
       - /app/node_modules
@@ -32,8 +29,6 @@ services:
       - '5432:5432'
     volumes:
       - nest-postgres:/var/lib/postgresql/data
-# networks:
-#   nesjs-network:
 
 volumes:
   nest-postgres:
