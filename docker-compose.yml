@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  dev:
+    container_name: nest-postgres-dev
+    image: nest-postgres-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: npm run start:dev
+    ports:
+      - 3000:3000
+      - 9229:9229
+    # networks:
+    #   - nesjs-network
+    volumes:
+      - .:/app
+      - /app/node_modules
+    restart: always
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - nest-postgres:/var/lib/postgresql/data
+# networks:
+#   nesjs-network:
+
+volumes:
+  nest-postgres:
